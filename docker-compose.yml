@@ -1,0 +1,116 @@
+#version: '3'
+services:
+  mysql:
+    image: mysql/mysql-server:8.0.28
+    container_name: mysql-mtv
+    environment:
+      # 时区上海 - Time zone Shanghai (Change if needed) Asia/Shanghai
+      TZ: UTC
+      # root 密码 - root password
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3306:3306
+    volumes:
+      # 数据挂载 - Data mounting
+      - ./scripts/data/mysql/data:/var/lib/mysql
+      - ./scripts/data/mysql/my.cnf:/etc/mysql/my.cnf  # 如果需要自定义配置文件
+      # 日志
+    command:
+      # 将mysql8.0默认密码策略 修改为 原先 策略 (mysql8.0对其默认策略做了更改 会导致密码无法匹配)
+      # Modify the Mysql 8.0 default password strategy to the original strategy (MySQL8.0 to change its default strategy will cause the password to be unable to match)
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --explicit_defaults_for_timestamp=true
+      --lower_case_table_names=1
+    privileged: true
+    restart: always
+    networks:
+      - mangoTV
+
+  redis:
+    image: "redis"
+    container_name: redis-m
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - mangoTV
+
+  mongo:
+    image: mongo:latest
+    container_name: mongodb-m
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      # 数据挂载 - Data mounting
+      - ./scripts/data/mongodb/db:/data/db
+    networks:
+      - mangoTV
+
+  rabbitmq:
+    image: rabbitmq:3.9-management
+    container_name: rabbitmq-m
+    restart: always
+    hostname: rabbitmq_host
+    ports:
+      - 15672:15672
+      - 5672:5672
+    environment:
+      - RABBITMQ_DEFAULT_USER=root
+      - RABBITMQ_DEFAULT_PASS=123456
+    networks:
+      - mangoTV
+
+  zookeeper: # Kafka依赖Zookeeper
+    image: zookeeper:3.9.1
+    container_name: zookeeper-mtv
+    restart: always
+    ports:
+      - "2181:2181"
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: server.1=zookeeper-mtv:2888:3888
+      ZOO_4LW_COMMANDS_WHITELIST: "*"
+    volumes:
+      - ./scripts/data/zookeeper/data:/data
+      - ./scripts/data/zookeeper/datalog:/datalog
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "2181" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - mangoTV
+
+  kafka:
+    image: bitnami/kafka:3.6.0
+    container_name: kafka-mtv
+    restart: always
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-mtv:2181
+      KAFKA_LISTENERS: PLAINTEXT://:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-mtv:9092
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_NUM_PARTITIONS: 3
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+    volumes:
+      - ./scripts/data/kafka/data:/bitnami/kafka/data
+    depends_on:
+      - zookeeper
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "9092" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - mangoTV
+
+networks:
+  mangoTV:

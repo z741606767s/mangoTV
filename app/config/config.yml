@@ -1,0 +1,56 @@
+app:
+  currentLocation: UTC
+  app_sign_expire: 60
+  run_mode: dev
+  http_port: 8089
+  app_log_path: logs/
+  enable_logging: true
+  app_upload_dir: D:\GolandProjects\mangoTV   #  /www/mangoTV   /Users/yaosen/go/src/mangoTV
+  is_migrate: true
+
+mysql:
+  dbname: mango_tv
+  user: dev
+  password: 123456
+  host: 10.32.120.2
+  ports: 3306
+  max_open_conn: 1000
+  max_idle_conn: 100
+  conn_max_life_second: 30
+  table_prefix: c_
+  log_level: Info
+
+mongodb:
+  dbname: mango_tv
+  user: root
+  password: root
+  host: 10.32.120.2
+  ports: 27020
+
+redis:
+  host: 10.32.120.2
+  db: 0
+  user:
+  password: foobared
+  ports: 6379
+  min_idle_conn: 500
+  pool_size: 100
+  max_retries: 3
+
+rabbitmq:
+  user: root
+  password: 123456
+  host: 10.32.120.2
+  ports: 5679
+
+kafka:
+  brokers: ["10.32.120.2:9092"]
+
+
+jwtAuth:
+  accessSecret: ae0536f9-6450-4606-8e13-5a19ed505da0
+  accessExpire: 604800
+
+cloudStorage:
+  bucketName:
+  credentials:

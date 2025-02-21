@@ -1,0 +1,5 @@
+time="2025-02-21T07:44:33Z" level=info msg="Server exiting"
+time="2025-02-21T07:44:33Z" level=error msg="Error from consumer: kafka: tried to use a consumer group that was closed"
+time="2025-02-21T07:44:33Z" level=error msg="topic-business Err:[kafka: tried to use a consumer group that was closed]"
+time="2025-02-21T07:44:33Z" level=error msg="Error from consumer: kafka: tried to use a consumer group that was closed"
+time="2025-02-21T07:44:33Z" level=error msg="topic-notification Err:[kafka: tried to use a consumer group that was closed]"
