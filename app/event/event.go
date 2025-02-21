@@ -51,7 +51,7 @@ func (e *EventMQ) RegisterConsumers() {
 	// 注册 NotificationConsumerMq 的处理器
 	e.registerConsumer(e.ctx.Provider.BusinessConsumerMq, map[string]kafkaQueue.MessageHandler{
 		// 在这里添加 BusinessConsumerMq 需要处理的事件
-		constants.EventTypeLogs: e.ctx.Service.GetLogService().CreateLogEventHandler,
+		constants.EventTypeLogs: e.ctx.Service.GetLogService().CreateLogsMgEventHandler,
 	})
 
 	// 注册 BusinessConsumerMq 的处理器

@@ -6,4 +6,5 @@ type IService interface {
 	GetNotificationService() INotificationService
 	GetLogService() ILogService
 	GetUsersService() IUsersService
+	GetDramaService() IDramaService
 }

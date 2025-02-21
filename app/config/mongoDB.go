@@ -13,8 +13,7 @@ var MongoClient *mongo.Client
 
 func InitMongoDB() {
 	uri := fmt.Sprintf("mongodb://%s:%s@%s:%s", Cfg.MongoDB.User, Cfg.MongoDB.Password, Cfg.MongoDB.Host, Cfg.MongoDB.Ports)
-	logrus.Infof("Connecting to MongoDB at %s", uri)
-	clientOptions := options.Client().ApplyURI(uri) // 根据需要修改URI mongodb://localhost:27017
+	clientOptions := options.Client().ApplyURI(uri)
 	client, err := mongo.NewClient(clientOptions)
 	if err != nil {
 		logrus.Errorf("InitMongoDB err:%+v", err)

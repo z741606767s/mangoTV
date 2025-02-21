@@ -1,6 +1,7 @@
 package factory
 
 import (
+	dramaServices "mangoTV/app/domain/drama/services"
 	logsServices "mangoTV/app/domain/logs/services"
 	notificationServices "mangoTV/app/domain/notification/services"
 	usersServices "mangoTV/app/domain/users/services"
@@ -15,6 +16,7 @@ type ServiceFactory struct {
 	NotificationService *notificationServices.NotificationService
 	LogService          *logsServices.LogService
 	UsersService        *usersServices.UsersService
+	DramaService        *dramaServices.DramaService
 }
 
 // NewServiceFactory 创建服务实例
@@ -24,6 +26,7 @@ func NewServiceFactory(p *svc.ServiceContext) *ServiceFactory {
 		notificationServices.NewNotificationService(p),
 		logsServices.NewLogService(p),
 		usersServices.NewUsersService(p),
+		dramaServices.NewDramaService(p),
 	}
 }
 
@@ -45,4 +48,9 @@ func (s *ServiceFactory) GetLogService() iface2.ILogService {
 // GetUsersService 获取用户服务实例
 func (s *ServiceFactory) GetUsersService() iface2.IUsersService {
 	return s.UsersService
+}
+
+// GetDramaService 获取剧服务实例
+func (s *ServiceFactory) GetDramaService() iface2.IDramaService {
+	return s.DramaService
 }

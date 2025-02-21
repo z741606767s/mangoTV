@@ -1,5 +1,11 @@
 package main
 
+// @title mangoTV short video
+// @version 1.0
+// @description 海外短视频项目
+// @BasePath /api/v1
+// @contact.name API Support
+
 import (
 	"github.com/sirupsen/logrus"
 	"mangoTV/app/config"

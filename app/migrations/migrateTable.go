@@ -3,14 +3,13 @@ package migrations
 import (
 	"github.com/sirupsen/logrus"
 	"mangoTV/app/config"
-	"mangoTV/app/domain/logs/models"
 )
 
 // MigrateTable 用户表迁移
 func MigrateTable() {
 	err := config.Db.AutoMigrate(
-		// 添加要迁移的表模型
-		&models.Logs{},
+	// 添加要迁移的表模型
+	//&models.Logs{},
 	)
 	if err != nil {
 		logrus.Errorf("migrate rbac error Err:[%+v]", err)

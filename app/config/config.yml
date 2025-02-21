@@ -21,11 +21,11 @@ mysql:
   log_level: Info
 
 mongodb:
-  dbname: mango_tv
-  user: root
-  password: root
+  dbname: dev
+  user: dev
+  password: 123456
   host: 10.32.120.2
-  ports: 27020
+  ports: 27017
 
 redis:
   host: 10.32.120.2

@@ -6,6 +6,7 @@ import (
 	"gorm.io/gorm"
 	"mangoTV/app/config"
 	"mangoTV/app/config/kafkaQueue"
+	dramaDao "mangoTV/app/domain/drama/dao"
 	logsDao "mangoTV/app/domain/logs/dao"
 	notificationDao "mangoTV/app/domain/notification/dao"
 	usersDao "mangoTV/app/domain/users/dao"
@@ -20,14 +21,16 @@ type Provider struct {
 	BusinessConsumerMq     *kafkaQueue.KafkaConsumer
 	NotificationMq         *kafkaQueue.KafkaProducer
 	NotificationConsumerMq *kafkaQueue.KafkaConsumer
+	CloseFunc              func()
 
-	NotificationDao *notificationDao.NotificationDao
-	LogDao          *logsDao.LogDao
-	UsersDao        *usersDao.UsersDao
-	UsersDeviceDao  *usersDao.UsersDeviceDao
-	UsersFlowsDao   *usersDao.UserFlowsDao
-
-	CloseFunc func()
+	NotificationDao  *notificationDao.NotificationDao
+	LogDao           *logsDao.LogDao
+	LogsMgDao        *logsDao.LogsMgDao
+	UsersDao         *usersDao.UsersDao
+	UsersDeviceDao   *usersDao.UsersDeviceDao
+	UsersFlowsDao    *usersDao.UserFlowsDao
+	DramaDao         *dramaDao.DramaDao
+	DramaEpisodesDao *dramaDao.DramaEpisodesDao
 }
 
 // NewProvider 创建DB服务实例
@@ -37,10 +40,13 @@ func NewProvider() *Provider {
 		RedisDB: config.Client,
 		MongoDB: config.MongoClient,
 
-		NotificationDao: notificationDao.NewNotificationDao(config.Db),
-		LogDao:          logsDao.NewLogDao(config.Db),
-		UsersDao:        usersDao.NewUsersDao(config.Db),
-		UsersDeviceDao:  usersDao.NewUsersDeviceDao(config.Db),
-		UsersFlowsDao:   usersDao.NewUsersFlowsDao(config.Db),
+		NotificationDao:  notificationDao.NewNotificationDao(config.Db),
+		LogDao:           logsDao.NewLogDao(config.Db),
+		LogsMgDao:        logsDao.NewLogsMgDao(config.MongoClient),
+		UsersDao:         usersDao.NewUsersDao(config.Db),
+		UsersDeviceDao:   usersDao.NewUsersDeviceDao(config.Db),
+		UsersFlowsDao:    usersDao.NewUsersFlowsDao(config.Db),
+		DramaDao:         dramaDao.NewDramaDao(config.Db),
+		DramaEpisodesDao: dramaDao.NewDramaEpisodesDao(config.Db),
 	}
 }

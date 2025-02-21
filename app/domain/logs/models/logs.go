@@ -1,7 +1,6 @@
 package models
 
 import (
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"gorm.io/gorm"
 	"time"
 )
@@ -29,22 +28,6 @@ type Logs struct {
 	LatencyTime        string    `gorm:"column:latency_time;type:varchar(20);not null;comment:'请求耗时'" json:"latencyTime"`
 	CreatedAt          time.Time `gorm:"type:datetime;not null;column:created_at;default:CURRENT_TIMESTAMP;comment:'记录时间'" json:"-"`
 	FormattedCreatedAt string    `gorm:"-" json:"createdAt"`
-}
-
-type LogsMg struct {
-	ID          primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
-	LogType     int                `bson:"log_type" json:"logType"`
-	Level       string             `bson:"level" json:"level"`
-	Message     string             `bson:"message" json:"message"`
-	ApiName     string             `bson:"api_name" json:"apiName"`
-	Method      string             `bson:"method" json:"method"`
-	ReqParams   string             `bson:"req_params" json:"reqParams"`
-	ResParams   string             `bson:"res_params" json:"resParams"`
-	ActionName  string             `bson:"action_name" json:"actionName"`
-	ActionIp    string             `bson:"action_ip" json:"actionIp"`
-	ActionMan   string             `bson:"action_man" json:"actionMan"`
-	LatencyTime string             `bson:"latency_time" json:"latencyTime"`
-	Timestamp   primitive.DateTime `bson:"timestamp" json:"timestamp"`
 }
 
 func (l *Logs) Table() map[string]string {
